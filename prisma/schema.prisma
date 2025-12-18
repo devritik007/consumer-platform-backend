@@ -38,6 +38,7 @@ model User {
   fullName  String
   role      Role     @default(CONSUMER)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   farmerProfile FarmerProfile?
@@ -84,8 +85,9 @@ model Product {
 
   name        String
   description String?
-  price       String? // String to allow "₹40/kg" or "Negotiable"
-  quantity    String // e.g., "100 kg available"
+  price       Int
+  quantity    Int
+  unit        String // e.g., "kg", "lbs", "pieces"
 
   availability Availability @default(AVAILABLE_TODAY)
   isActive     Boolean      @default(true) // For moderation/soft delete
