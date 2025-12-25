@@ -15,24 +15,34 @@ const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers["authorization"];
+  // 1. Extract token from cookies
+  const token = req.cookies?.token;
 
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    res
+      .status(401)
+      .json({ message: "Unauthorized: Access denied, no token provided" });
+    return;
   }
 
-  // Remove "Bearer " prefix if present
-  const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
+  try {
+    const decodedUser = verifyToken(token);
 
-  // Verify the token and extract user information
-  const user = verifyToken(cleanToken);
+    if (!decodedUser) {
+      res
+        .status(401)
+        .json({ message: "Unauthorized: Invalid or expired token" });
+      return;
+    }
 
-  if (!user) {
-    return res.status(401).json({ message: "Unauthorized" });
+    // 3. Attach the user payload to the request for use in controllers
+    req.user = decodedUser as User;
+
+    next();
+  } catch (error) {
+    console.error("Auth Middleware Error:", error);
+    res.status(401).json({ message: "Unauthorized: Authentication failed" });
   }
-
-  req.user = user as User; // Attach user to request object
-  next();
 };
 
 const roleMiddleware = (roles: string[]) => {
@@ -40,7 +50,10 @@ const roleMiddleware = (roles: string[]) => {
     const user = req.user;
 
     if (!user || !roles.includes(user.role)) {
-      return res.status(403).json({ message: "Forbidden" });
+      res.status(403).json({
+        message: "Forbidden: You do not have permission to perform this action",
+      });
+      return;
     }
 
     next();

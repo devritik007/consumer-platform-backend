@@ -8,8 +8,8 @@ if (!SECRET_KEY) {
 }
 
 // Function to generate a JWT token
-export const generateToken = (userId: string): string => {
-  return jwt.sign({ id: userId }, SECRET_KEY, { expiresIn: "1h" });
+export const generateToken = (userId: string, role: string): string => {
+  return jwt.sign({ id: userId, role: role }, SECRET_KEY, { expiresIn: "1h" });
 };
 
 // Function to verify a JWT token

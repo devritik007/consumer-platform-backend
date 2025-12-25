@@ -6,6 +6,13 @@ import {
   comparePassword,
 } from "../utils/tokenUtils.js";
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  maxAge: 3600000, // 1 hour
+};
+
 // User registration
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -43,7 +50,9 @@ export const registerUser = async (req: Request, res: Response) => {
     });
 
     // Generate token
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.role);
+
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
       message: "User registered successfully",
@@ -91,7 +100,9 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     // Generate token
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.role);
+
+    res.cookie("token", token, cookieOptions);
 
     res.status(200).json({
       message: "Login successful",
@@ -121,7 +132,21 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: { farmerProfile: true },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        role: true,
+        createdAt: true,
+        farmerProfile: {
+          select: {
+            id: true,
+            farmName: true,
+            address: true,
+            city: true,
+          },
+        },
+      },
     });
 
     if (!user) {
