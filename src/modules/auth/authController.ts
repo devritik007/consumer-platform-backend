@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
-import { prisma } from "../config/prisma.js";
+import { prisma } from "../../config/prisma.js";
+import { userRepository } from "../user/userRepository.js";
 import {
   generateToken,
   hashPassword,
   comparePassword,
-} from "../utils/tokenUtils.js";
+} from "../../shared/utils/jwtUtil.js";
 
 const cookieOptions = {
   httpOnly: true,
@@ -27,9 +28,7 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await userRepository.findByEmail(email);
 
     if (existingUser) {
       res.status(409).json({ message: "User already exists" });
@@ -40,13 +39,11 @@ export const registerUser = async (req: Request, res: Response) => {
     const hashedPassword = await hashPassword(password);
 
     // Create user
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        fullName,
-        role: role || "CONSUMER",
-      },
+    const user = await userRepository.create({
+      email,
+      password: hashedPassword,
+      fullName,
+      role: role || "CONSUMER",
     });
 
     // Generate token
@@ -82,9 +79,7 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     // Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await userRepository.findByEmail(email);
 
     if (!user) {
       res.status(401).json({ message: "Invalid email or password" });
