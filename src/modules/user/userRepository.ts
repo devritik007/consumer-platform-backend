@@ -1,4 +1,4 @@
-import { prisma } from "../config/database.js";
+import { prisma } from "../../config/prisma.js";
 
 export const userRepository = {
   findByEmail(email: string) {

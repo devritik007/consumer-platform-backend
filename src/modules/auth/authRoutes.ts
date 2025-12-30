@@ -4,7 +4,7 @@ import {
   loginUser,
   logoutUser,
   getUserProfile,
-} from "../../controllers/authController.js";
+} from "./authController.js";
 import { authMiddleware } from "../../shared/middleware/authMiddleware.js";
 
 const router = Router();

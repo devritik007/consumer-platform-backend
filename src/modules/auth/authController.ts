@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { prisma } from "../../config/database.js";
-import { userRepository } from "../../user/userRepository.js";
+import { prisma } from "../../config/prisma.js";
+import { userRepository } from "../user/userRepository.js";
 import {
   generateToken,
   hashPassword,
@@ -40,10 +40,10 @@ export const registerUser = async (req: Request, res: Response) => {
 
     // Create user
     const user = await userRepository.create({
-        email,
-        password: hashedPassword,
-        fullName,
-        role: role || "CONSUMER",
+      email,
+      password: hashedPassword,
+      fullName,
+      role: role || "CONSUMER",
     });
 
     // Generate token
