@@ -54,6 +54,16 @@ Then update the values in `.env` file:
 - `PORT` - Server port (default: 3000)
 - `NODE_ENV` - Environment mode (development/production)
 
+### CORS Configuration
+
+This backend uses CORS (Cross-Origin Resource Sharing) to allow browser access only from trusted frontend origins.
+
+#### Environment Variable
+
+```env
+ALLOWED_ORIGINS=http://localhost:3000
+```
+
 ### Database Setup
 
 **Option 1: Using Docker (Recommended for local development)**
