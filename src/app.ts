@@ -2,6 +2,7 @@ import express, { type Express } from "express";
 import authRoutes from "./modules/auth/authRoutes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { env } from "./config/env.js";
 import farmerRoutes from "./modules/farmer/farmerRoutes.js";
 
 const app: Express = express();
@@ -11,7 +12,7 @@ app.use(cors());
 app.use(cookieParser());
 
 const allowedOrigins =
-  process.env.ALLOWED_ORIGINS
+  env.ALLOWED_ORIGINS
     ?.split(",")
     .map(o => o.trim()) || [];
 
