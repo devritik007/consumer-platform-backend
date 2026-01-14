@@ -20,8 +20,7 @@ enum Role {
 }
 
 enum Availability {
-  AVAILABLE_TODAY
-  AVAILABLE_THIS_WEEK
+  AVAILABLE
   OUT_OF_STOCK
 }
 
@@ -48,6 +47,7 @@ model FarmerProfile {
   id     String @id @default(cuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @default(FARMER)
 
   farmName          String
   bio               String?
@@ -89,7 +89,7 @@ model Product {
   quantity    Int
   unit        String // e.g., "kg", "lbs", "pieces"
 
-  availability Availability @default(AVAILABLE_TODAY)
+  availability Availability @default(AVAILABLE)
   isActive     Boolean      @default(true) // For moderation/soft delete
 
   createdAt DateTime @default(now())
