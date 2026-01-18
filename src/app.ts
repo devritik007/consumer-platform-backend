@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { env } from "./config/env.js";
 import farmerRoutes from "./modules/farmer/farmerRoutes.js";
+import productRoutes from "./modules/product/productRoutes.js";
 
 const app: Express = express();
 
@@ -33,5 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/farmer", farmerRoutes);
+
+app.use("/api/product", productRoutes);
 
 export default app;
