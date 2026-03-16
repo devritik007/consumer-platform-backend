@@ -56,6 +56,15 @@ export const listMyProducts = async (req: any, res: Response) => {
   }
 };
 
+export const listAllProducts = async (req: any, res: Response) => {
+  try {
+    const products = await productService.listAllProducts();
+    res.status(200).json(products);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const deleteProduct = async (req: any, res: Response) => {
   try {
     const validatedParams = req.validatedData?.params;
