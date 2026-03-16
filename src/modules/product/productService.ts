@@ -14,7 +14,7 @@ export const productService = {
   },
 
   async getCategories() {
-    return productRepository.findAll();
+    return productRepository.findAllCategories();
   },
 
   async addproduct(userId: string, data: any) {
@@ -59,6 +59,9 @@ export const productService = {
     }
 
     return productRepository.findAllByFarmerId(farmer.id);
+  },
+  async listAllProducts() {
+    return productRepository.findAll();
   },
 
   async deleteProduct(userId: string, productId: string) {
