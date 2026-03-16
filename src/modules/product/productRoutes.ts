@@ -26,7 +26,6 @@ import {
 const router = Router();
 
 router.get("/all", listAllProducts);
-router.get("/categories", getCategories);
 router.use(authMiddleware, roleMiddleware(["FARMER"]));
 
 router.post(
