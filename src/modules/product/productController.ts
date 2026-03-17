@@ -34,14 +34,10 @@ export const listMyProducts = asyncHandler(async (req: any, res: Response) => {
   res.status(200).json(products);
 });
 
-export const listAllProducts = async (req: any, res: Response) => {
-  try {
-    const products = await productService.listAllProducts();
-    res.status(200).json(products);
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
-  }
-};
+export const listAllProducts = asyncHandler(async (req: any, res: Response) => {
+  const products = await productService.listAllProducts();
+  res.status(200).json(products);
+});
 
 export const deleteProduct = asyncHandler(async (req: any, res: Response) => {
   const validatedParams = req.validatedData?.params;

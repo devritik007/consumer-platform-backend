@@ -3,6 +3,7 @@ import { prisma } from "../../config/prisma.js";
 export const productRepository = {
   async findAll() {
     return prisma.product.findMany({
+      where: { isActive: true },
       orderBy: { name: "asc" },
       include: { category: true },
     });
