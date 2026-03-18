@@ -34,6 +34,11 @@ export const listMyProducts = asyncHandler(async (req: any, res: Response) => {
   res.status(200).json(products);
 });
 
+export const listAllProducts = asyncHandler(async (req: any, res: Response) => {
+  const products = await productService.listAllProducts();
+  res.status(200).json(products);
+});
+
 export const deleteProduct = asyncHandler(async (req: any, res: Response) => {
   const validatedParams = req.validatedData?.params;
   await productService.deleteProduct(req.user.id, validatedParams.productId);

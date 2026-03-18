@@ -4,6 +4,7 @@ import {
   addCategory,
   updateProduct,
   listMyProducts,
+  listAllProducts,
   getCategories,
   deleteProduct,
 } from "./productController.js";
@@ -24,6 +25,7 @@ import {
 
 const router = Router();
 
+router.get("/all", listAllProducts);
 router.use(authMiddleware, roleMiddleware(["FARMER"]));
 
 router.post(
